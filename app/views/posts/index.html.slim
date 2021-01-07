@@ -1,6 +1,11 @@
 h1 投稿一覧
-= @posts.each do |post|
+- @posts.each do |post|
   = '*****************'
-  = post.name
-  = post.post.content
-  = post.tags.pluck(:name).join(',')
+  br
+  = "タイトル: " + post.name
+  br
+  = "内容: " + post.content
+  br
+  = "タグ: " + post.tags.pluck(:name).join(',')
+  br
+= '*****************'
