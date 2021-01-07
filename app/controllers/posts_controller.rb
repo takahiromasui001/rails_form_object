@@ -17,6 +17,20 @@ class PostsController < ApplicationController
     end
   end
 
+  def edit
+    @form = PostForm.new(post: Post.find(params[:id]))
+  end
+
+  def update
+    @form = PostForm.new(post_params, post: Post.find(params[:id]))
+
+    if @form.save
+      redirect_to posts_path, notice: 'The post has been updated'
+    else
+      render :new
+    end
+  end
+
   private
 
   def post_params
