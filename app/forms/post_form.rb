@@ -3,6 +3,8 @@ class PostForm
 
   attr_accessor :title, :content, :tag_names
 
+  delegate :persisted?, to: :post
+
   def initialize(attributes = nil, post: Post.new)
     @post = post
     attributes ||= default_attributes
@@ -16,6 +18,10 @@ class PostForm
     end
   rescue ActiveRecord::RecordInvalid
     false
+  end
+
+  def to_model
+    post
   end
 
   private
