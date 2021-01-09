@@ -8,7 +8,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @form = PostForm.new(post_params)
+    @form = PostForm.new(params: post_params)
 
     if @form.save
       redirect_to posts_path, notice: 'The post has been created'
@@ -22,7 +22,10 @@ class PostsController < ApplicationController
   end
 
   def update
-    @form = PostForm.new(post_params, post: Post.find(params[:id]))
+    pp '******************'
+    pp post_params 
+    pp '******************'
+    @form = PostForm.new(params: post_params, post: Post.find(params[:id]))
 
     if @form.save
       redirect_to posts_path, notice: 'The post has been updated'

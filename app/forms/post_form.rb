@@ -1,8 +1,15 @@
 class PostForm
-  def initialize(params = nil)
+  attr_reader :title, :content, :tag_names
+
+  def initialize(params: nil, post: Post.new)
+    @post = post
+    @title = post.name
+    @content = post.content
+    @tag_names = post.tags.map(&:name).join(',')
+
     return if params.nil?
 
-    @name = params[:title]
+    @title = params[:title]
     @content = params[:content]
     @tag_names = params[:tag_names]
   end
@@ -10,13 +17,17 @@ class PostForm
   def save
     ActiveRecord::Base.transaction do
       tags = @tag_names.split(',').map { |tag| Tag.find_or_create_by(name: tag) }
-      Post.create!(name: @name, content: @content, tags: tags)
+      @post.update!(name: @title, content: @content, tags: tags)
     end
   rescue ActiveRecord::RecordInvalid
     false
   end
 
   def to_model
-    Post.new
+    @post
+  end
+
+  def persisted?
+    @post.persisted?
   end
 end
