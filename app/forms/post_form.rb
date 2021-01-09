@@ -3,11 +3,11 @@ class PostForm
 
   def initialize(params: nil, post: Post.new)
     @post = post
-    @title = post.name
-    @content = post.content
-    @tag_names = post.tags.map(&:name).join(',')
-
-    return if params.nil?
+    params ||= {
+      title: post.name,
+      content: post.content,
+      tag_names: post.tags.map(&:name).join(',')
+    }
 
     @title = params[:title]
     @content = params[:content]

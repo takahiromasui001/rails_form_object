@@ -22,9 +22,6 @@ class PostsController < ApplicationController
   end
 
   def update
-    pp '******************'
-    pp post_params 
-    pp '******************'
     @form = PostForm.new(params: post_params, post: Post.find(params[:id]))
 
     if @form.save
