@@ -1,5 +1,7 @@
 class PostForm
-  attr_reader :title, :content, :tag_names
+  include ActiveModel::Model
+
+  attr_accessor :title, :content, :tag_names
 
   def initialize(params: nil, post: Post.new)
     @post = post
@@ -9,15 +11,13 @@ class PostForm
       tag_names: post.tags.map(&:name).join(',')
     }
 
-    @title = params[:title]
-    @content = params[:content]
-    @tag_names = params[:tag_names]
+    super(params)
   end
 
   def save
     ActiveRecord::Base.transaction do
-      tags = @tag_names.split(',').map { |tag| Tag.find_or_create_by(name: tag) }
-      @post.update!(name: @title, content: @content, tags: tags)
+      tags = tag_names.split(',').map { |tag| Tag.find_or_create_by(name: tag) }
+      @post.update!(name: title, content: content, tags: tags)
     end
   rescue ActiveRecord::RecordInvalid
     false
